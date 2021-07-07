@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 
 import { Movie } from "../../models/movie";
 import { httpClient, imgBaseUrl } from "../../core/http";
+import Player from "react-player";
+import movieTrailer from "movie-trailer";
 
 export interface IRowProps {
   title: string;
@@ -12,6 +14,7 @@ export interface IRowProps {
 
 export const Row: React.FC<IRowProps> = ({ title, urlEndpoint, large }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [trailerId, setTrailerId] = useState<string | null>(null);
 
   useEffect(() => {
     const getMovies = async () => {
@@ -22,6 +25,23 @@ export const Row: React.FC<IRowProps> = ({ title, urlEndpoint, large }) => {
     getMovies();
   }, [urlEndpoint]);
 
+  const handleClick = (movie: Movie) => {
+    if (trailerId) {
+      setTrailerId(null);
+    } else {
+      movieTrailer(
+        movie.original_name || movie.original_title || movie.name || ""
+      )
+        .then((url?: string) => {
+          if (url) {
+            console.log(url);
+            setTrailerId(url);
+          }
+        })
+        .catch((err: any) => console.error(err));
+    }
+  };
+
   return (
     <RowContainer>
       <Title>{title}</Title>
@@ -30,6 +50,7 @@ export const Row: React.FC<IRowProps> = ({ title, urlEndpoint, large }) => {
           return (
             <Moviesontainer key={movie.id}>
               <PosterImage
+                onClick={() => handleClick(movie)}
                 src={`${imgBaseUrl}${
                   large ? movie.poster_path : movie.backdrop_path
                 }`}
@@ -39,6 +60,15 @@ export const Row: React.FC<IRowProps> = ({ title, urlEndpoint, large }) => {
           );
         })}
       </MoviesRow>
+      {trailerId && (
+        <TrailerPlayer
+          className="player"
+          url={trailerId}
+          controls
+          playing
+          width="100%"
+        />
+      )}
     </RowContainer>
   );
 };
@@ -75,4 +105,9 @@ const PosterImage = styled.img`
   &:hover {
     transform: scale(1.1);
   }
+`;
+
+const TrailerPlayer = styled(Player)`
+  width: unset;
+  height: unset;
 `;

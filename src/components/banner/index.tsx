@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
+
 import { endpoints, httpClient, imgBaseUrl } from "../../core/http";
 
 import { Movie } from "../../models/movie";
@@ -43,14 +44,15 @@ const BannerHeader = styled.header<{ endpoint: string }>`
 
 const BannerContent = styled.div`
   margin-left: 30px;
-  padding-top: 10px;
+  padding-top: 3em;
   height: 190px;
 `;
 
-const BannerTitle = styled.h1`
+const BannerTitle = styled.h2`
   font-size: 3rem;
   font-weight: 800;
   padding-bottom: 0.3rem;
+  margin-bottom: 0.3em;
 `;
 
 const BannerButton = styled.button`
@@ -85,7 +87,7 @@ const Description = styled.div`
 `;
 
 const BottomFade = styled.div`
-  height: 6rem;
+  height: 5rem;
   background-image: linear-gradient(
     180deg,
     transparent,

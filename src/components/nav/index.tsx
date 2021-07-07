@@ -5,8 +5,6 @@ export const Navbar: React.FC = () => {
   const [showNavBackground, setShowNavBackground] = useState(false);
 
   const handleScroll = () => {
-    console.log(window.scrollY, showNavBackground);
-
     if (window.scrollY > 100 && !showNavBackground) {
       setShowNavBackground(true);
     } else {
@@ -47,6 +45,7 @@ const NavbarContainer = styled.nav<{ scrolled: boolean }>`
   justify-content: space-between;
   z-index: 1;
   background-color: ${({ scrolled }) => (scrolled ? "#111" : "transparent")};
+  transition-timing-function: ease-in;
   transition: all 0.3s;
 `;
 
